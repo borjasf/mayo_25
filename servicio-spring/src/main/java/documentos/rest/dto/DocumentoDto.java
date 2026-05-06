@@ -12,7 +12,7 @@ public class DocumentoDto {
   
     private String id;
   
-    private String usuario;
+    private String propietario;
   
     private String contenido;
     
@@ -22,10 +22,10 @@ public class DocumentoDto {
     }
 
     
-    public DocumentoDto(String id, String usuario, String contenido, List <String> colaboradores) {
+    public DocumentoDto(String id, String propietario, String contenido, List <String> colaboradores) {
 		super();
 		this.id = id;
-		this.usuario = usuario;
+		this.propietario = propietario;
 		this.contenido = contenido;
 		this.colaboradores = colaboradores;
 	}
@@ -41,13 +41,13 @@ public class DocumentoDto {
 	}
 
 
-	public String getUsuario() {
-		return usuario;
+	public String getPropietario() {
+		return propietario;
 	}
 
 
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
+	public void setPropietario(String propietario) {
+		this.propietario = propietario;
 	}
 
 
@@ -74,7 +74,7 @@ public class DocumentoDto {
 	public static DocumentoDto fromEntity(Documento doc) {
 	    return new DocumentoDto(
 	        doc.getId(),
-	        doc.getUsuario(),
+	        doc.getPropietario(),
 	        doc.getContenido(),
 	        doc.getColaboradores().stream()
 	            .map(colab -> colab.toString())

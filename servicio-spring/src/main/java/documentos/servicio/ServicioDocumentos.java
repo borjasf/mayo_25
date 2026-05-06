@@ -100,7 +100,7 @@ public class ServicioDocumentos implements IServicioDocumentos {
 	public List<Documento> recuperarByPropietario(String nombrePropietario) throws EntidadNoEncontrada {
 		if (nombrePropietario == null || nombrePropietario.isEmpty())
 			throw new IllegalArgumentException("nombrePropietario: no debe ser nulo ni vacio");
-		return repositorio.recuperarByPropietario(nombrePropietario);
+		return repositorio.findByPropietario(nombrePropietario);
 	}
 
 

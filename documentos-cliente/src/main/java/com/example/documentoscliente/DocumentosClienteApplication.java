@@ -32,7 +32,7 @@ public class DocumentosClienteApplication {
 	public DocumentClient documentClient() {
 		// Ajustar la base URL según el servicio de documentos (ej:
 		// http://localhost:8080/api/)
-		Retrofit retrofit = new Retrofit.Builder().baseUrl("http://localhost:8080/api/")
+		Retrofit retrofit = new Retrofit.Builder().baseUrl("http://localhost:8080/")
 				.addConverterFactory(GsonConverterFactory.create()).build();
 
 		return retrofit.create(DocumentClient.class);

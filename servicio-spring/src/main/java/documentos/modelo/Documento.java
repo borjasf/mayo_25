@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Documento {
 	@Id
 	private String id;
-	private String usuario;
+	private String propietario;
 	private List <String> colaboradores;
 	private String contenido;
 
@@ -21,12 +21,12 @@ public class Documento {
 		this.id = id;
 	}
 
-	public String getUsuario() {
-		return usuario;
+	public String getPropietario() {
+		return propietario;
 	}
 
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
+	public void setPropietario(String propietario) {
+		this.propietario = propietario;
 	}
 
 	
@@ -41,9 +41,9 @@ public class Documento {
 		this.contenido = contenido;
 	}
 
-	public Documento (String usuario, String contenido) {
+	public Documento (String propietario, String contenido) {
 		super();
-		this.usuario = usuario;
+		this.propietario = propietario;
 		this.setColaboradores(new LinkedList<>());
 		this.contenido = contenido;
 	}
