@@ -1,0 +1,192 @@
+
+services:
+  # ===== Base de Datos MySQL =====
+  #mysql:
+  #  image: mysql:8.0
+  #  container_name: arso-mysql
+  #  environment:
+  #    MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-practicas}
+  #    MYSQL_DATABASE: ${DB_NAME:-tienda}
+  #  ports:
+  #    - "3306:3306"
+  #  volumes:
+  #    - mysql-data:/var/lib/mysql
+  #    - ./mysql-init.sql:/docker-entrypoint-initdb.d/init.sql
+  #  networks:
+  #    - arso-network
+  #  healthcheck:
+  #    test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD:-practicas}"]
+  #    interval: 10s
+  #    timeout: 5s
+  #    retries: 5
+
+  # ===== Base de Datos MongoDB =====
+  mongo:
+    image: mongo:8
+    restart: always
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    image: mongo-express:1.0.2-20
+    restart: always
+    ports:
+      - "8082:8081"
+    environment:
+      ME_CONFIG_BASICAUTH: false
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+    depends_on:
+      - mongo
+  # ===== RabbitMQ Message Broker =====
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: arso-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
+    ports:
+      - "5672:5672"   # AMQP protocol
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - arso-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===== Servicio Usuarios (JAX-RS Legacy) =====
+  #usuarios:
+  #  build:
+  #    context: ./usuarios
+  #    dockerfile: Dockerfile
+  #  container_name: arso-usuarios
+  #  environment:
+  #    DB_URL: jdbc:mysql://mysql:3306/${DB_NAME:-tienda}?serverTimezone=CET
+  #    DB_USER: ${DB_USER:-root}
+  #    DB_PASSWORD: ${DB_PASSWORD:-practicas}
+  #    RABBITMQ_HOST: rabbitmq
+  #    RABBITMQ_PORT: 5672
+  #    RABBITMQ_USER: ${RABBITMQ_USER:-guest}
+  #    RABBITMQ_PASS: ${RABBITMQ_PASS:-guest}
+  #    SERVER_PORT: 8080
+  #  ports:
+  #    - "8080:8080"
+  #  depends_on:
+  #    mysql:
+  #      condition: service_healthy
+  #    rabbitmq:
+  #      condition: service_healthy
+  #  networks:
+  #    - arso-network
+  #  restart: on-failure
+  #  entrypoint: ["sh", "-c", "until nc -z mysql 3306; do echo 'Waiting for MySQL...'; sleep 2; done; exec java $$JAVA_OPTS -Djavax.persistence.jdbc.url=$$DB_URL -Djavax.persistence.jdbc.user=$$DB_USER -Djavax.persistence.jdbc.password=$$DB_PASSWORD -jar app.jar"]
+#
+  # ===== Servicio Productos (Spring Boot) =====
+  #productos-spring:
+  #  build:
+  #    context: ./productos-spring
+  #    dockerfile: Dockerfile
+  #  container_name: arso-productos
+  #  environment:
+  #    DB_HOST: mysql
+  #    DB_PORT: 3306
+  #    DB_NAME: ${DB_NAME:-tienda}
+   #   DB_USER: ${DB_USER:-root}
+   #   DB_PASSWORD: ${DB_PASSWORD:-practicas}
+   #   RABBITMQ_HOST: rabbitmq
+   #   RABBITMQ_PORT: 5672
+   #   RABBITMQ_USER: ${RABBITMQ_USER:-guest}
+   #   RABBITMQ_PASS: ${RABBITMQ_PASS:-guest}
+   #   SERVER_PORT: 8081
+ #   ports:
+     # - "8083:8081"  # External port 8083 to avoid conflict with mongo-express
+   # depends_on:
+   #   mysql:
+   #     condition: service_healthy
+   #   rabbitmq:
+   #     condition: service_healthy
+   # networks:
+   #   - arso-network
+   # restart: on-failure
+   # entrypoint: ["sh", "-c", "until nc -z mysql 3306; do echo 'Waiting for MySQL...'; sleep 2; done; exec java $$JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar app.jar"]
+
+  # ===== Servicio Compraventas (Spring Boot) =====
+  #compraventas-spring:
+  #  build:
+  #    context: ./compraventas-spring
+  #    dockerfile: Dockerfile
+  #  container_name: arso-compraventas
+  #  environment:
+  #    MONGO_URI: mongodb://mongodb:27017/${MONGO_DB:-compraventas}
+#      MONGO_DB: ${MONGO_DB:-compraventas}
+      #RABBITMQ_HOST: rabbitmq
+  #    RABBITMQ_PORT: 5672
+  #    RABBITMQ_USER: ${RABBITMQ_USER:-guest}
+  #    RABBITMQ_PASS: ${RABBITMQ_PASS:-guest}
+  #    PRODUCTOS_SERVICE_URL: http://productos-spring:8081/
+  #    USUARIOS_SERVICE_URL: http://usuarios:8080/
+  #    SERVER_PORT: 8082
+  #  ports:
+  #    - "8082:8082"
+  #  depends_on:
+   #   mongodb:
+   #     condition: service_healthy
+   #   rabbitmq:
+   #     condition: service_healthy
+   #   usuarios:
+   #     condition: service_started
+   #   productos-spring:
+ #       condition: service_started
+   # networks:
+   #   - arso-network
+   # restart: on-failure
+#
+  ## ===== Pasarela API Gateway (Spring Boot + Zuul) =====
+  #pasarela:
+   # build:
+   #   context: ./pasarela
+   #   dockerfile: Dockerfile
+   # container_name: arso-pasarela
+    #environment:
+    #  USUARIOS_HOST: usuarios
+    #  USUARIOS_PORT: 8080
+    #  PRODUCTOS_HOST: productos-spring
+    #  PRODUCTOS_PORT: 8081
+    #  COMPRAVENTAS_HOST: compraventas-spring
+    #  COMPRAVENTAS_PORT: 8082
+  #    GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-your-client-id}
+      #GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-your-client-secret}
+    #  SERVER_PORT: 8090
+    #ports:
+ #     - "8090:8090"
+    #depends_on:
+    #  - usuarios
+    #  - productos-spring
+    #  - compraventas-spring
+    #networks:
+    #  - arso-network
+    #restart: on-failure
+
+# ===== Volúmenes para Persistencia =====
+volumes:
+  #mysql-data:
+   # driver: local
+  mongodb_data:
+    driver: local
+  rabbitmq-data:
+    driver: local
+
+# ===== Red Personalizada =====
+networks:
+  arso-network:
+    driver: bridge
