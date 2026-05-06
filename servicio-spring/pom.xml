@@ -12,9 +12,9 @@
 	</parent>
 
 	<groupId>arso</groupId>
-	<artifactId>encuestas-spring</artifactId>
+	<artifactId>documentos-spring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>encuestas-spring</name>
+	<name>documentos-spring</name>
 	<description>Servicio Encuestas</description>
 
 	<properties>
