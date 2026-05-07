@@ -27,6 +27,8 @@ import documentos.rest.dto.DocumentoDto;
 import documentos.rest.dto.NuevoDocumentoDto;
 import documentos.servicio.IServicioDocumentos;
 
+// SIEMPRE SE USA LA ANOTACION @RestController.
+// LAS CLASES DE excepciones SIEMPRE SON IGUALES.
 @RestController
 @RequestMapping("/documentos")
 public class DocumentosController{
@@ -80,6 +82,9 @@ public class DocumentosController{
 		servicio.eliminarDocumento(id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	//SE USA PUTMAPPING PARA REEMPLAZAR TODO EL RECURSO Y PATCH PARA MODIFICAR SOLO UNA PARTE DE EL. 
+	//EN ESTE CASO SOLO QUEREMOS AÑADIR UN COLABORADOR, NO REEMPLAZAR TODO EL DOCUMENTO, POR ESO USAMOS PATCH.
 	@PatchMapping("/{id}/colaboradores")
 	public ResponseEntity<Void> añadirColaborador(@PathVariable String id,@RequestBody String colaborador) throws Exception{
 		 

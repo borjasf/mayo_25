@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+//SI ES MONGO, SIEMPRE USARE @DOCUMENT Y @ID, SI ES SQL USARE @Entity Y @ID
 @Document(collection="documentos")
 public class Documento {
 	@Id

@@ -27,7 +27,7 @@ public class ConsumidorEventos {
 		try {
 			//Parsear el JSON del evento
 			JsonNode node = objectMapper.readTree(body);
-			//Verificar el tipo de mensaje
+			//Verificar el tipo de mensaje, ESTO ES LO QUE CAMBIA DE UN EXAMEN A OTRO.
 			if(node.has("tipo")&&"usuario_eliminado".equals(node.get("tipo").asText())) {
 				String usuarioEliminado = node.get("usuario").asText();
 				System.out.println("Elimnando los documentos del usuario "+usuarioEliminado);

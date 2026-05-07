@@ -1,6 +1,8 @@
 
 services:
   # ===== Base de Datos MySQL =====
+  # SI ME PIDEN IMPLEMENTAR PERSISTENCIA CON JPA O SI TENGO QUE DESPLEGAR UN CONTENEDOR MYSQL.
+  # SI DESCOMENTO ESTO, COMENTO (O ELIMINO) EL BLOQUE DE MONGO
   #mysql:
   #  image: mysql:8.0
   #  container_name: arso-mysql
@@ -25,17 +27,22 @@ services:
     image: mongo:8
     restart: always
     ports:
+	# PuertoHost:PuertoContenedor
+    # El enunciado de mayo pide explícitamente usar el 27018 en el host, si no 27017:27017.
       - "27018:27017"
     volumes:
       - mongodb_data:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
-
+	  
+	  
+# ===== Interfaz Gráfica para MongoDB =====
   mongo-express:
     image: mongo-express:1.0.2-20
     restart: always
     ports:
+	# Accederé a la interfaz gráfica desde http://localhost:8082
       - "8082:8081"
     environment:
       ME_CONFIG_BASICAUTH: false
@@ -44,27 +51,30 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
     depends_on:
       - mongo
+	  
+
   # ===== RabbitMQ Message Broker =====
   rabbitmq:
     image: rabbitmq:3.12-management-alpine
     container_name: arso-rabbitmq
+	# Si el enunciado del examen no te pide cambiar las credenciales de RabbitMQ, 
+	# asume siempre las que vienen por defecto para ahorrar tiempo.
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
     ports:
-      - "5672:5672"   # AMQP protocol
-      - "15672:15672" # Management UI
+		# Puerto de comunicación interna AMQP (donde se conectará tu código Java)
+      - "5672:5672"  
+	  # Puerto para la interfaz gráfica web (http://localhost:15672)	
+      - "15672:15672"
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     networks:
       - arso-network
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    # Se eliminan los healthchecks innecesarios cumpliendo la corrección del profesor en nuestras prácticas.
 
   # ===== Servicio Usuarios (JAX-RS Legacy) =====
+  # CASI NUNCA DEBO DESCOMENTAR ESTOS 3 BLOQUES, SON PROPIOS DE MI PRÁCTICA
   #usuarios:
   #  build:
   #    context: ./usuarios
@@ -152,6 +162,8 @@ services:
    # restart: on-failure
 #
   ## ===== Pasarela API Gateway (Spring Boot + Zuul) =====
+  # TODOS ESTOS SON DE MI PROPIO CÓDIGO, SOLO DESCOMENTO PASARELA SI TENGO QUE
+  # CREAR UN COMPONENTE QUE ACTUE COMO PUNTO DE ACCESO, O UTILIZAR NETFLIX ZUUL PARA ENRUTAR PETICIONES
   #pasarela:
    # build:
    #   context: ./pasarela

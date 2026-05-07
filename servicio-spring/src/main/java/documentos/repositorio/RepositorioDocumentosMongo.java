@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import documentos.modelo.Documento;
 
+
+//SI ES MONGO, SE HEREDA DE MONGOREPOSITORY, SI ES SQL SE HEREDA DE JPAREPOSITORY, 
+//(SI ES JAX RS NO SE HEREDA DE NADA, HAY Q CREAR LA QUERY MANUALMENTE)
 public interface RepositorioDocumentosMongo 
 	extends RepositorioDocumentos, MongoRepository<Documento, String> {
 

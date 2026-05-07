@@ -12,6 +12,7 @@ import documentos.modelo.Documento;
 import documentos.repositorio.RepositorioDocumentosMongo;
 import repositorio.EntidadNoEncontrada;
 
+// LA CLASE SIEMPRE LLEVA LA ANOTACION @Service Y EL CONSTRUCTOR CON @Autowired PARA INYECTAR EL REPOSITORIO CORRESPONDIENTE
 @Service
 @Transactional
 public class ServicioDocumentos implements IServicioDocumentos {
