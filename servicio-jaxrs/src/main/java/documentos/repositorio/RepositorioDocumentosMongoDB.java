@@ -20,6 +20,7 @@ import repositorio.RepositorioMongoDB;
 import utils.MongoDBConnectionManager;
 import utils.PropertiesReader;
 
+//NO TOCAR PARA EL EXAMEN.
 public class RepositorioDocumentosMongoDB extends RepositorioMongoDB<Documento> {
 
 	private MongoCollection<Documento> collection;

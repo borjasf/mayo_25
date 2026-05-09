@@ -11,6 +11,10 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
+
+//INTERFAZ DE RETROFIT.
+//Retrofit se usa siempre que tengo que crear un "cliente" o que comunicar un microservicio A con uno B.
+//Retrofit hace que llamar a una URL externa sea tan facil como llamar a un método de Java.
 public interface DocumentClient {
 
     @POST("documentos")

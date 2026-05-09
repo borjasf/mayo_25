@@ -35,7 +35,7 @@ public class DocumentosController{
 
 	private IServicioDocumentos servicio;
 	
-	//@Autowired
+	//@Autowiredx
 	//private PagedResourcesAssembler<DocumentoResumen> pagedResourcesAssembler;
 	
 

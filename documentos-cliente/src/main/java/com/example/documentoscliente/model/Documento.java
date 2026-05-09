@@ -3,6 +3,8 @@ package com.example.documentoscliente.model;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// EL MODELO AQUÍ NO LLEVA NINGUN @ DE SPRINGDATA, ES SOLO UN POJO NORMAL Y CORRIENTE.
 public class Documento {
 
     private String id;

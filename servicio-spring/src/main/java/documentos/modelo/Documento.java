@@ -14,6 +14,16 @@ public class Documento {
 	private String propietario;
 	private List <String> colaboradores;
 	private String contenido;
+	
+	
+	public Documento (String propietario, String contenido) {
+		super();
+		this.propietario = propietario;
+		this.setColaboradores(new LinkedList<>());
+		this.contenido = contenido;
+	}
+	
+	
 
 	public String getId() {
 		return id;
@@ -31,22 +41,11 @@ public class Documento {
 		this.propietario = propietario;
 	}
 
-	
-
-
-
 	public String getContenido() {
 		return contenido;
 	}
 
 	public void setContenido(String contenido) {
-		this.contenido = contenido;
-	}
-
-	public Documento (String propietario, String contenido) {
-		super();
-		this.propietario = propietario;
-		this.setColaboradores(new LinkedList<>());
 		this.contenido = contenido;
 	}
 
